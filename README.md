@@ -7,8 +7,27 @@ It is built to help desk workers rebuild posture awareness and reduce long-term 
 
 This implementation is the PyTorch rebuild and submission-quality engineering version of the published work:
 
-- https://bozliu.medium.com/dynamic-siting-posture-recognition-and-correction-68ae418fbc77
+- [Dynamic Siting Posture Recognition and Correction](https://bozliu.medium.com/dynamic-siting-posture-recognition-and-correction-68ae418fbc77)
 
+
+
+## Figures from the Published Article
+
+### Figure 5. Successful detection of the standing posture
+
+![Figure 5 - Successful detection of the standing posture](docs/figures/figure5_successful_standing_detection.jpeg)
+
+### Figure 6. Successful detection of the sitting posture
+
+![Figure 6 - Successful detection of the sitting posture](docs/figures/figure6_successful_sitting_detection.jpeg)
+
+### Figure 7. Failure examples of pose estimation
+
+![Figure 7 - Failure examples of pose estimation](docs/figures/figure7_pose_estimation_failure_examples.png)
+
+### Figure 8. Input and output from dynamic imaging system
+
+![Figure 8 - Input and output from dynamic imaging system](docs/figures/figure8_dynamic_imaging_input_output.png)
 
 ## What Problem This Solves
 
