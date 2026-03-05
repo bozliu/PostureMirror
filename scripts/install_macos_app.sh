@@ -29,6 +29,16 @@ run() {
   "$@"
 }
 
+copy_tree() {
+  local src="$1"
+  local dst="$2"
+  if command -v ditto >/dev/null 2>&1; then
+    ditto "$src" "$dst"
+  else
+    cp -R "$src" "$dst"
+  fi
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --source-app)
@@ -101,7 +111,7 @@ if [[ "$DRY_RUN" -eq 0 && ! -w "$APPS_DIR" ]]; then
 fi
 
 log "Validating source app in temporary workspace"
-run ditto "$SOURCE_APP" "$TMP_APP"
+run copy_tree "$SOURCE_APP" "$TMP_APP"
 
 TMP_EXEC="$TMP_APP/Contents/MacOS/PostureMirror"
 if [[ ! -f "$TMP_EXEC" ]]; then
@@ -115,7 +125,7 @@ if [[ -d "$TARGET_APP" ]]; then
 fi
 
 log "Installing app to: $TARGET_APP"
-run ditto "$TMP_APP" "$TARGET_APP"
+run copy_tree "$TMP_APP" "$TARGET_APP"
 
 if command -v xattr >/dev/null 2>&1; then
   log "Clearing quarantine attribute"
