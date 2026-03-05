@@ -74,7 +74,15 @@ if [[ ! -f "$SOURCE_EXEC" ]]; then
 fi
 
 TARGET_APP="$APPS_DIR/PostureMirror.app"
-TMP_DIR="$(mktemp -d /private/tmp/posturemirror-install.XXXXXX)"
+TMP_BASE="/private/tmp"
+if [[ ! -d "$TMP_BASE" || ! -w "$TMP_BASE" ]]; then
+  TMP_BASE="${TMPDIR:-/tmp}"
+fi
+if [[ ! -d "$TMP_BASE" || ! -w "$TMP_BASE" ]]; then
+  echo "No writable temp directory found. Checked /private/tmp and ${TMPDIR:-/tmp}" >&2
+  exit 1
+fi
+TMP_DIR="$(mktemp -d "${TMP_BASE%/}/posturemirror-install.XXXXXX")"
 TMP_APP="$TMP_DIR/PostureMirror.app"
 
 cleanup() {
@@ -109,7 +117,11 @@ fi
 log "Installing app to: $TARGET_APP"
 run ditto "$TMP_APP" "$TARGET_APP"
 
-log "Clearing quarantine attribute"
-run xattr -dr com.apple.quarantine "$TARGET_APP" || true
+if command -v xattr >/dev/null 2>&1; then
+  log "Clearing quarantine attribute"
+  run xattr -dr com.apple.quarantine "$TARGET_APP" || true
+else
+  log "xattr not available, skipping quarantine cleanup"
+fi
 
 log "Install complete. No .bak folders were created."
